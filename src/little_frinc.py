@@ -1,8 +1,7 @@
 #! /usr/bin/env python
 #  little frinc
 
-
-#!/usr/bin/env python
+DEBUG_ = True
 
 from Tkinter import *
 
