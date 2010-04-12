@@ -24,7 +24,7 @@ EXIT_TEXT = "Are you sure you want to exit? There are unfinished packets"
 SCAN_DATA_TEXT = "".join(("You have to press Strg + v to scan your ",
                         "clipboard for links... Yes, it's STRG + v! Not",
                         " command apple banana rainbow... It really is",
-                        " Strg + v, even on Mac!",))
+                        " Strg + v, even on Mac!"))
 # END USER CODE global
 
 class CustomLfmain(Lfmain):
