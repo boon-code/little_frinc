@@ -10,6 +10,7 @@ from lfmain import CustomLfmain
 from pfpwd import CustomPfpwd
 
 import sys
+import os
 import threading
 import time
 import platform
@@ -47,7 +48,7 @@ except:
 
 class application(object):
     
-    def __init__(self):
+    def __init__(self, cfg_path):
         
         if 'NPYCK_' in globals():
             self._npyck = True
@@ -58,7 +59,9 @@ class application(object):
         
         if self._cfg.has_key('cfg'):
             det = pfdetainer.file_detainer(self._cfg['cfg'])
+            self.warn_unfinished = False
         else:
+            self.warn_unfinished = True
             det = pfdetainer.mem_detainer()
         
         self.manager = pfmanager.manager(self._cfg, det, load_pending=True)
@@ -139,8 +142,18 @@ class application(object):
     def exit(self):
         
         self.root.quit()
-        sys.exit()
-
-if __name__ == "__main__":
-    app = application()
+        self.manager.kill()
+        #sys.exit()
+        
+def main(args):
+    "The main entry-point."
+    
+    path = "config.txt"
+    if len(args) > 0:
+        path = args[0]
+    
+    app = application(path)
     app.mainloop()
+
+if __name__ == "__main__": main(sys.argv[1:])
+

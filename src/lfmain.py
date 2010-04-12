@@ -48,12 +48,14 @@ class CustomLfmain(Lfmain):
     # Callback to handle _butExit widget option -command
     def _butExit_command(self, *args):
         
-        for i in self._man.get_packets():
-            if not i.is_finished():
-                if tkMessageBox.askyesno("Exit Little-Frinc?", EXIT_TEXT):
-        	        self._app.exit()
-                
-                return
+        if self._app.warn_unfinished:
+            
+            for i in self._man.get_packets():
+                if not i.is_finished():
+                    if tkMessageBox.askyesno("Exit Little-Frinc?", EXIT_TEXT):
+                        self._app.exit()
+                    return
+        
         self._app.exit()
 
     # _butHistory_command --
@@ -196,9 +198,10 @@ class CustomLfmain(Lfmain):
         curr = self._lsPackets.curselection()
         if len(curr) > 0:
             curr = self._lsPackets.get(curr[0])
-            for i in pname:
+            for i in self._man.get_packets():
                 if i.has_name(curr):
-                    self._labStatus.config(text=i.status())
+                    self._labStatus.config(
+                        text="\n".join(i.status().split(' ')))
     
     	root.after(UPDATE_TIME, self.__update_packets, root)
     
