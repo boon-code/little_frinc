@@ -58,13 +58,14 @@ class application(object):
         self._cfg = self.__loadconfig(cfg_path)
         
         if self._cfg.has_key('cfg'):
-            det = pfdetainer.file_detainer(self._cfg['cfg'])
+            self.detainer = pfdetainer.file_detainer(self._cfg['cfg'])
             self.warn_unfinished = False
         else:
             self.warn_unfinished = True
-            det = pfdetainer.mem_detainer()
+            self.detainer = pfdetainer.mem_detainer()
         
-        self.manager = pfmanager.manager(self._cfg, det, load_pending=True)
+        self.manager = pfmanager.manager(self._cfg, self.detainer,
+            load_pending=True)
         self.root = Tk()
         # self will be passed
         self._main_gui = CustomLfmain(self)
