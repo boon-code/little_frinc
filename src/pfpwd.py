@@ -83,6 +83,7 @@ class CustomPfpwd(Pfpwd):
     	
     	Pfpwd.__init__(self, root)
     	self._app = app
+    	self._man = app.manager
     	self._entPwd.bind("<Return>", self._butAdd_command)
     	self._butUpdate_command()
 
