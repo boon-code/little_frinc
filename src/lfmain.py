@@ -16,8 +16,15 @@ from lfmain_ui import Lfmain
 # BEGIN USER CODE global
 import tkMessageBox
 
-UPDATE_TIME = 1000
+import pfscan
+import pfutil
+
+UPDATE_TIME = 200
 EXIT_TEXT = "Are you sure you want to exit? There are unfinished packets"
+SCAN_DATA_TEXT = "".join(("You have to press Strg + v to scan your ",
+                        "clipboard for links... Yes, it's STRG + v! Not",
+                        " command apple banana rainbow... It really is",
+                        " Strg + v, even on Mac!"))
 # END USER CODE global
 
 class CustomLfmain(Lfmain):
@@ -36,12 +43,16 @@ class CustomLfmain(Lfmain):
             return
         
         result = self._man.padd(links)
+        
+        if len(links) == result:
+            self._lsLinks.delete(0, 'end')
 
     # _butClearall_command --
     #
     # Callback to handle _butClearall widget option -command
     def _butClearall_command(self, *args):
-        pass
+        
+        self._lsLinks.delete(0, 'end')
 
     # _butExit_command --
     #
@@ -210,6 +221,8 @@ class CustomLfmain(Lfmain):
         self._txData.delete('0.0', 'end')
         event.widget.event_generate("<<Paste>>")
         self.__scan()
+        self._txData.delete('0.0', 'end')
+        self._txData.insert('end', SCAN_DATA_TEXT)
     
     def __scan(self):
         
@@ -229,12 +242,12 @@ class CustomLfmain(Lfmain):
         self._man = app.manager
         root = self._app.root
         
-        Lfmain.__init__(self, root
-        )
+        Lfmain.__init__(self, root)
         self._sclPackets["command"] = self._lsPackets.yview
         # bindings...
         root.bind("<Control_L>v", self.__past_and_scan)
         self._txData.bind("<Button-3>", self.__past_and_scan)
+        self._txData.insert('end', SCAN_DATA_TEXT)
         
         root.after(UPDATE_TIME, self.__update_packets, root)
     # END USER CODE class
